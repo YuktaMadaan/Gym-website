@@ -12,21 +12,28 @@ pipeline {
         stage('Package') {
             steps {
                 echo 'Zipping static website files...'
-                sh 'zip -r gymwebsite.zip * -x .git/* Jenkinsfile'
+                script {
+                    if (isUnix()) {
+                        sh 'zip -r gym-website.zip *'
+                    } else {
+                        bat 'powershell Compress-Archive -Path * -DestinationPath gym-website.zip -Force'
+                    }
+                }
             }
         }
 
         stage('Deploy to Azure') {
-            environment {
-                AZURE_CREDS = credentials('azure-ftp-creds')
-            }
             steps {
-                echo "Deploying website to Azure..."
-                sh '''
-                curl -X POST -u $AZURE_CREDS_USR:$AZURE_CREDS_PSW \
-                  --data-binary @gymwebsite.zip \
-                  https://gym-website.scm.azurewebsites.net/api/zipdeploy
-                '''
+                echo 'Deploying to Azure Web App...'
+                // Replace with your actual deployment command
+                // Example using FTP:
+                script {
+                    if (isUnix()) {
+                        sh 'curl -T gym-website.zip ftp://<azure-site>.scm.azurewebsites.net/site/wwwroot/ --user <username>:<password>'
+                    } else {
+                        bat 'curl -T gym-website.zip ftp://<azure-site>.scm.azurewebsites.net/site/wwwroot/ --user <username>:<password>'
+                    }
+                }
             }
         }
     }
