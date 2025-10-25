@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        AZ_USER = credentials('azure-ftp-user')     // Jenkins credential ID for FTPS username
-        AZ_PASS = credentials('azure-ftp-pass')     // Jenkins credential ID for FTPS password
+        AZ_USER = credentials('REDACTED')     // Jenkins credential ID for FTPS username
+        AZ_PASS = credentials('REDACTED')     // Jenkins credential ID for FTPS password
     }
 
     stages {
