@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Define FTP connection details as environment variables
         FTP_SITE = 'waws-prod-hk1-081.ftp.azurewebsites.windows.net'
         FTP_PATH = '/site/wwwroot/'
     }
@@ -17,34 +18,33 @@ pipeline {
         stage('Deploy to Azure') {
             steps {
                 echo '🚀 Uploading index.html to Azure Web App via FTP...'
+                // Retrieve credentials and assign to environment variables FTP_USER and FTP_PASS
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
                     script {
+                        // Create the full authentication string (username:password) for curl
+                        def ftpAuth = "${FTP_USER}:${FTP_PASS}" 
+                        
                         if (isUnix()) {
-                            // Unix/Linux command remains correct
-                            sh "curl -v -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
+                            // Unix/Linux: Use sh step and Groovy string interpolation
+                            sh "curl -v -T index.html -u ${ftpAuth} ftp://${FTP_SITE}${FTP_PATH}"
                         } else {
-                            // Windows bat command: FTP_USER must be processed by Jenkins to escape the '\'
-                            // Use the syntax with the escaped backslash directly
-                            def windowsFtpUser = env.FTP_USER.replace('\\', '\\\\') 
-                            bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
-                            // OR, to be safer and more verbose:
-                            // The original command is actually correct if the environment variable itself is correctly set by Jenkins:
-                            // bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%" 
-                            // *If* the resolution issue persists, try the verbose flag and check network (as previously advised).
-                            // Let's stick with the original but add -v for diagnostics.
-                            bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                            // Windows (bat): Use Groovy interpolation and single quotes around auth
+                            // This ensures the backslash in the username (appname\$) is passed correctly
+                            // to curl without Windows cmd interpreting it first.
+                            bat "curl -v -T index.html -u '${ftpAuth}' ftp://${FTP_SITE}${FTP_PATH}"
                         }
                     }
                 }
             }
         }
+    }
 
     post {
         success {
             echo '✅ Deployment successful! Visit your site on Azure.'
         }
         failure {
-            echo '❌ Deployment failed. Check Jenkins or Azure logs.'
+            echo '❌ Deployment failed. Check Jenkins or Azure logs for specific errors.'
         }
     }
 }
