@@ -11,6 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '🔍 Pulling code from GitHub...'
+                // Using the declarative git step for initial SCM checkout is best practice
                 git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
             }
         }
@@ -22,16 +23,17 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
                     script {
                         // Create the full authentication string (username:password) for curl
+                        // This handles the Azure username format (appname\$) correctly via Groovy interpolation
                         def ftpAuth = "${FTP_USER}:${FTP_PASS}" 
                         
                         if (isUnix()) {
-                            // Unix/Linux: Use sh step and Groovy string interpolation
+                            // Unix/Linux: Standard curl syntax with verbose flag
                             sh "curl -v -T index.html -u ${ftpAuth} ftp://${FTP_SITE}${FTP_PATH}"
                         } else {
-                            // Windows (bat): Use Groovy interpolation and single quotes around auth
-                            // This ensures the backslash in the username (appname\$) is passed correctly
-                            // to curl without Windows cmd interpreting it first.
-                            bat "curl -v -T index.html -u '${ftpAuth}' ftp://${FTP_SITE}${FTP_PATH}"
+                            // Windows (bat): Removed single quotes. 
+                            // The Groovy string interpolation handles the complex username, 
+                            // and removing quotes prevents them from being sent to the FTP server.
+                            bat "curl -v -T index.html -u ${ftpAuth} ftp://${FTP_SITE}${FTP_PATH}" 
                         }
                     }
                 }
