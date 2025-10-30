@@ -2,19 +2,13 @@ pipeline {
     agent any
 
     environment {
-        // CHANGED: Using the standard Azure Web App FTP hostname format
-        // This is a common workaround for DNS instability with the longer regional address.
-        FTP_SITE = 'ftp.gymweb.azurewebsites.net' // <<< VERIFY THIS HOSTNAME MATCHES YOUR APP NAME
+        // USE THIS EXACT HOSTNAME, based on your latest input
+        FTP_SITE = 'waws-prod-pn1-021.ftp.azurewebsites.windows.net' 
         FTP_PATH = '/site/wwwroot/'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo '🔍 Pulling code from GitHub...'
-                git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
-            }
-        }
+        // ... (Checkout stage is fine)
 
         stage('Deploy to Azure') {
             steps {
@@ -24,9 +18,10 @@ pipeline {
                         def ftpAuth = "${FTP_USER}:${FTP_PASS}" 
                         
                         if (isUnix()) {
+                            // Unix/Linux: Use sh step
                             sh "curl -v -T index.html -u ${ftpAuth} ftp://${FTP_SITE}${FTP_PATH}"
                         } else {
-                            // Correct Windows syntax to prevent login errors (no surrounding quotes)
+                            // Windows (bat): Correct syntax for complex username (Gymweb\$)
                             bat "curl -v -T index.html -u ${ftpAuth} ftp://${FTP_SITE}${FTP_PATH}" 
                         }
                     }
@@ -34,13 +29,5 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo '✅ Deployment successful! Visit your site on Azure.'
-        }
-        failure {
-            echo '❌ Deployment failed. Check Jenkins or Azure logs for specific errors.'
-        }
-    }
+    // ... (post block is fine)
 }
