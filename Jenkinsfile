@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '🔍 Pulling code from GitHub...'
-                git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
+                git 'https://github.com/YuktaMadaan/Gym-website.git'
             }
         }
 
@@ -20,10 +20,9 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
                     script {
                         if (isUnix()) {
-                            sh "curl --ftp-pasv -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
+                            sh "curl -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
                         } else {
-                            bat "dir"
-                            bat "curl --ftp-pasv -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                            bat "curl -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
                         }
                     }
                 }
