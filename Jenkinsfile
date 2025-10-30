@@ -8,11 +8,11 @@ pipeline {
 
     stages {
         stage('Checkout') {
-    steps {
-        echo '🔍 Pulling code from GitHub...'
-        git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
-    }
-}
+            steps {
+                echo '🔍 Pulling code from GitHub...'
+                git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
+            }
+        }
 
         stage('Deploy to Azure') {
             steps {
