@@ -20,15 +20,24 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
                     script {
                         if (isUnix()) {
-                            sh "curl -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
+                            // Unix/Linux command remains correct
+                            sh "curl -v -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
                         } else {
-                            bat "curl -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                            // Windows bat command: FTP_USER must be processed by Jenkins to escape the '\'
+                            // Use the syntax with the escaped backslash directly
+                            def windowsFtpUser = env.FTP_USER.replace('\\', '\\\\') 
+                            bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                            // OR, to be safer and more verbose:
+                            // The original command is actually correct if the environment variable itself is correctly set by Jenkins:
+                            // bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%" 
+                            // *If* the resolution issue persists, try the verbose flag and check network (as previously advised).
+                            // Let's stick with the original but add -v for diagnostics.
+                            bat "curl -v -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
                         }
                     }
                 }
             }
         }
-    }
 
     post {
         success {
