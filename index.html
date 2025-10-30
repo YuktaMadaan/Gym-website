@@ -3,214 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <title>MAD FITNESS</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      scroll-behavior: smooth;
-    }
-
     body {
-      background-color: #0e0e0e;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
       color: #fff;
-      line-height: 1.6;
     }
 
-    /* Header */
     header {
+      background: #000;
+      color: #fff;
+      padding: 10px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 18px 100px;
-      background: rgba(0, 0, 0, 0.9);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
+      justify-content: space-between;
     }
 
     .logo {
-      font-size: 26px;
-      font-weight: 700;
-      color: #ff0000;
+      font-size: 22px;
       text-decoration: none;
-      letter-spacing: 1px;
+      color: #ff3b3b;
+      font-weight: bold;
     }
 
     .logo span {
-      color: #fff;
+      color: white;
     }
 
     .navbar {
-      display: flex;
       list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
     }
 
     .navbar li {
-      margin: 0 20px;
+      margin-left: 15px;
     }
 
     .navbar a {
-      text-decoration: none;
       color: #fff;
-      font-weight: 500;
-      transition: 0.3s;
+      text-decoration: none;
     }
 
     .navbar a:hover {
-      color: #ff0000;
+      color: #ff3b3b;
     }
 
-    .top-btn .nav-btn {
-      background: #ff0000;
-      padding: 8px 18px;
-      border-radius: 5px;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .top-btn .nav-btn:hover {
-      background: #fff;
-      color: #ff0000;
-    }
-
-    /* Home Section */
     .home {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 40px;
       align-items: center;
-      padding: 120px 100px;
-      min-height: 100vh;
-      background: linear-gradient(90deg, #000000, #1a1a1a);
+      justify-content: space-around;
     }
 
     .home-content {
-      max-width: 600px;
-    }
-
-    .home-content h3 {
-      font-size: 2rem;
+      max-width: 500px;
     }
 
     .home-content h1 {
-      font-size: 3.5rem;
-      color: #ff0000;
-    }
-
-    .home-content span {
-      color: #fff;
-    }
-
-    .home-content p {
-      margin: 20px 0;
-      color: #ccc;
-      font-size: 1rem;
+      color: #ff3b3b;
+      margin: 10px 0;
     }
 
     .btn {
       display: inline-block;
-      background: #ff0000;
+      background: #ff3b3b;
       color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 8px 15px;
       text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s;
+      border-radius: 5px;
     }
 
     .btn:hover {
-      background: #fff;
-      color: #ff0000;
+      background: white;
+      color: #ff3b3b;
     }
 
     .home-img img {
-      width: 400px;
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+      width: 300px;
+      border-radius: 10px;
     }
 
-    /* About Section */
     .about {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 100px;
-      background: #111;
-      flex-wrap: wrap;
+      padding: 40px;
+      background: #1a1a1a;
     }
 
-    .about-img img {
-      width: 400px;
-      border-radius: 15px;
-      margin-right: 50px;
+    .about h2 {
+      color: #ff3b3b;
     }
 
-    .about .heading {
-      font-size: 2rem;
-      color: #ff0000;
+    .about img {
+      width: 300px;
+      border-radius: 10px;
       margin-bottom: 20px;
     }
 
     .about p {
       color: #ddd;
-      margin-bottom: 15px;
-      text-align: justify;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #ff0000;
-      padding: 10px 20px;
-      border-radius: 6px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      background: #fff;
-      color: #ff0000;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        padding: 15px 30px;
-      }
-
-      .navbar {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .home {
-        flex-direction: column;
-        text-align: center;
-        padding: 100px 30px;
-      }
-
-      .home-img img {
-        width: 90%;
-        margin-top: 30px;
-      }
-
-      .about {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .about-img img {
-        margin: 20px 0;
-        width: 90%;
-      }
     }
   </style>
 </head>
@@ -219,59 +115,37 @@
   <!--HEADER SECTION-->
   <header>
     <a href="#" class="logo">Mad<span> Fitness</span></a>
-    <div class='bx bx-menu' id="menu-icon"></div>
     <ul class="navbar">
       <li><a href="#home">Home</a></li>
       <li><a href="mad1.html">Services</a></li>
       <li><a href="mad2.html">Pricing</a></li>
       <li><a href="mad3.html">Review</a></li>
-      <li><a href="#about">About Us</a></li>
+      <li><a href="#about">About</a></li>
     </ul>
-    <div class="top-btn">
-      <a href="#" class="nav-btn">Join us</a>
-    </div>
+    <a href="#" class="btn">Join Us</a>
   </header>
 
-  <!--Home section code-->
+  <!--HOME SECTION-->
   <section class="home" id="home">
     <div class="home-content">
       <h3>Build Your</h3>
       <h1>Dream Physique</h1>
-      <h3><span class="muliple-text">Bodybuilding</span></h3>
-      <p>At MAD FITNESS, we are dedicated to helping you achieve your fitness goals, no matter your level of experience.
-        Our state-of-the-art facility offers a wide range of workout options, from strength training and cardio to
-        flexibility and endurance programs.</p>
+      <h3><span>Bodybuilding</span></h3>
+      <p>At MAD FITNESS, we are dedicated to helping you achieve your fitness goals. Whether you're a beginner or a seasoned athlete, we have something for everyone!</p>
       <a href="#" class="btn">Join Us</a>
     </div>
-
     <div class="home-img">
       <img src="both.jpg" alt="pic not found">
     </div>
   </section>
 
+  <!--ABOUT SECTION-->
   <section class="about" id="about">
-    <div class="about-img">
-      <img src="main.jpg" alt="">
-    </div>
-    <div class="about-img">
-      <h2 class="heading">Why Choose Us?</h2>
-      <p>Our Diverse Membership base creates a friendly and supportive atmosphere, where you can make friends and stay
-        motivated.</p>
-      <p>At Mad Fitness, we are dedicated to helping you reach your fitness goals with personalized training programs,
-        state-of-the-art facilities, and a supportive community that motivates you to become the best version of
-        yourself. Here's why we're the best choice for your fitness journey:</p>
-      <p><strong>1. Expert Trainers:</strong> Certified trainers create customized workout plans for all levels.<br>
-        <strong>2. State-of-the-Art Facilities:</strong> Modern equipment, clean spaces.<br>
-        <strong>3. Variety of Classes:</strong> HIIT, yoga, spin, and strength training.<br>
-        <strong>4. Flexible Membership Plans:</strong> Basic to premium options.<br>
-        <strong>5. Results-Driven Approach:</strong> Track your progress regularly.<br>
-        <strong>6. Supportive Community:</strong> A family that inspires each other.<br>
-        <strong>7. Focus on Wellness:</strong> Includes nutrition and recovery guidance.</p>
-
-      <a href="#" class="btn">Book a Free Class</a>
-    </div>
+    <h2>Why Choose Us?</h2>
+    <img src="main.jpg" alt="">
+    <p>At Mad Fitness, we are dedicated to helping you reach your fitness goals with personalized training programs and supportive community. We provide modern equipment, flexible membership, and expert trainers.</p>
+    <a href="#" class="btn">Book a Free Class</a>
   </section>
 
-  <script src="mad.js"></script>
 </body>
 </html>
