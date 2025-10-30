@@ -20,9 +20,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
                     script {
                         if (isUnix()) {
-                            sh "curl -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
+                            sh "curl --ftp-pasv -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
                         } else {
-                            bat "curl -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                            bat "dir"
+                            bat "curl --ftp-pasv -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
                         }
                     }
                 }
