@@ -1,21 +1,30 @@
 pipeline {
     agent any
 
+    environment {
+        FTP_SITE = 'waws-prod-hk1-081.ftp.azurewebsites.windows.net'
+        FTP_PATH = '/site/wwwroot/'
+    }
+
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                echo "📦 Checking out source code..."
-                git branch: 'main', url: 'https://github.com/YuktaMadaan/Gym-website.git'
+                echo '🔍 Pulling code from GitHub...'
+                git 'https://github.com/YuktaMadaan/Gym-website.git'
             }
         }
 
-        stage('Deploy to Azure via FTP') {
+        stage('Deploy to Azure') {
             steps {
-                echo "🚀 Deploying to Azure App Service..."
+                echo '🚀 Uploading index.html to Azure Web App via FTP...'
                 withCredentials([usernamePassword(credentialsId: 'azure-ftp-creds', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
-                    bat """
-                        curl -T index.html -u %FTP_USER%:%FTP_PASS% ftp://waws-prod-hk1-081.ftp.azurewebsites.windows.net/site/wwwroot/index.html --ssl
-                    """
+                    script {
+                        if (isUnix()) {
+                            sh "curl -T index.html -u $FTP_USER:$FTP_PASS ftp://$FTP_SITE$FTP_PATH"
+                        } else {
+                            bat "curl -T index.html -u %FTP_USER%:%FTP_PASS% ftp://%FTP_SITE%%FTP_PATH%"
+                        }
+                    }
                 }
             }
         }
@@ -23,10 +32,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Deployment successful!'
+            echo '✅ Deployment successful! Visit your site on Azure.'
         }
         failure {
-            echo '❌ Deployment failed. Check Jenkins or Azure logs for details.'
+            echo '❌ Deployment failed. Check Jenkins or Azure logs.'
         }
     }
 }
